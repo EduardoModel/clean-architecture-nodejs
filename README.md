@@ -1,3 +1,3 @@
-# Ts boilerplate
+# Clean architecture with Nodejs
 
-A prepared boilerplate to write back-end code with typescript
+This project is focused on the learning and unterstanding of the clean architecture applied on NodeJs.
