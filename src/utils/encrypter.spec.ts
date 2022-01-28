@@ -1,5 +1,6 @@
-import Encrypter from './encypter'
 import bcrypt from 'bcryptjs'
+import Encrypter from './encypter'
+import MissingParamError from './errors/missing-param-error'
 
 const makeSut = () => {
   const sut = new Encrypter()
@@ -27,5 +28,11 @@ describe('Encrypter', () => {
     await sut.compare('any_string', 'hashed_string')
     expect(bcrypt.s).toBe(sut.string)
     expect(bcrypt.hash).toBe(sut.hash)
+  })
+
+  test('it should throw if string was not informed', async () => {
+    const { sut } = makeSut()
+    const promise = sut.compare()
+    expect(promise).rejects.toThrow(new MissingParamError('string'))
   })
 })
