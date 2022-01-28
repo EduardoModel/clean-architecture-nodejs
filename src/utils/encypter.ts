@@ -11,6 +11,9 @@ export default class Encrypter implements IEncrypter {
     if (!string) {
       throw new MissingParamError('string')
     }
+    if (!hash) {
+      throw new MissingParamError('hash')
+    }
     this.string = string
     this.hash = hash
     this.isHashValid = await bcrypt.compare(this.string, this.hash)
