@@ -18,20 +18,20 @@ class LoadUserByEmailRepositorySpy implements ILoadUserByEmailRepository {
 }
 
 class EncrypterSpy implements IEncrypter {
-  password : string
-  hashedPassword : string
-  isPasswordValid : boolean
-  async compare (password : string, hashedPassword : string) : Promise<boolean> {
-    this.password = password
-    this.hashedPassword = hashedPassword
-    return this.isPasswordValid
+  string : string
+  hash : string
+  isHashValid : boolean
+  async compare (string : string, hash : string) : Promise<boolean> {
+    this.string = string
+    this.hash = hash
+    return this.isHashValid
   }
 }
 
 class TokenGeneratorSpy implements ITokenGenerator {
   userId: number
   accessToken : string
-  generate (userId : number) : Promise<string> {
+  async generate (userId : number) : Promise<string> {
     this.userId = userId
 
     return this.accessToken
@@ -68,14 +68,14 @@ const makeLoadUserByRepositoryWithError = () => {
 
 const makeEncrypter = () => {
   const encrypterSpy = new EncrypterSpy()
-  encrypterSpy.isPasswordValid = true
+  encrypterSpy.isHashValid = true
   return encrypterSpy
 }
 
 const makeEncrypterWithError = () => {
   const encrypterSpy = new EncrypterSpy()
-  encrypterSpy.isPasswordValid = true
-  encrypterSpy.compare = (password : string, hashedPassword : string) => {
+  encrypterSpy.isHashValid = true
+  encrypterSpy.compare = (string : string, hash : string) => {
     throw new Error()
   }
   return encrypterSpy
@@ -262,7 +262,7 @@ describe('AuthUseCase', () => {
 
   test('it should return null if an invalid password is provided', async () => {
     const { sut, encrypterSpy } = makeSut()
-    encrypterSpy.isPasswordValid = false
+    encrypterSpy.isHashValid = false
 
     const email = 'valid_email@mail.com'
     const password = 'invalid_password'
@@ -278,8 +278,8 @@ describe('AuthUseCase', () => {
     const password = 'any_password'
 
     await sut.auth(email, password)
-    expect(encrypterSpy.password).toBe(password)
-    expect(encrypterSpy.hashedPassword).toBe(loadUserByEmailRepositorySpy.user.password)
+    expect(encrypterSpy.string).toBe(password)
+    expect(encrypterSpy.hash).toBe(loadUserByEmailRepositorySpy.user.password)
   })
 
   test('it should call UpdateAccessTokenRepository with correct values', async () => {
