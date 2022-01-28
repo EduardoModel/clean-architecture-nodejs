@@ -1,15 +1,16 @@
 import IEncrypter from './interfaces/IEncrypter'
+import bcrypt from 'bcryptjs'
 
 class Encrypter implements IEncrypter {
-  password: string
-  hashedPassword: string
-  isPasswordValid: boolean
+  string: string
+  hash: string
+  isHashValid: boolean
 
-  compare (password: string, hashedPassword: string): Promise<boolean> {
-    this.password = password
-    this.hashedPassword = hashedPassword
-
-    return new Promise((resolve) => resolve(this.isPasswordValid))
+  async compare (string: string, hash: string): Promise<boolean> {
+    this.string = string
+    this.hash = hash
+    this.isHashValid = await bcrypt.compare(this.string, this.hash)
+    return this.isHashValid
   }
 }
 
@@ -23,7 +24,13 @@ const makeSut = () => {
 describe('Encrypter', () => {
   test('it should return true if bcrypt returns true', async () => {
     const { sut } = makeSut()
-    const isValid = await sut.compare('any_password', 'hashed_password')
+    const isValid = await sut.compare('any_string', 'hashed_string')
     expect(isValid).toBe(true)
+  })
+  test('it should return false if bcrypt returns false', async () => {
+    const { sut } = makeSut()
+    bcrypt.isHashValid = false
+    const isValid = await sut.compare('any_string', 'hashed_string')
+    expect(isValid).toBe(false)
   })
 })

@@ -1,6 +1,6 @@
 export default interface IEncrypter {
-  password: string
-  hashedPassword : string
-  isPasswordValid : boolean
-  compare(password : string, hashedPassword : string) : Promise<boolean>
+  string: string
+  hash : string
+  isHashValid : boolean
+  compare(string : string, hash : string) : Promise<boolean>
 }
