@@ -1,5 +1,6 @@
 import validator from 'validator'
 import EmailValidator from './email-validator'
+import MissingParamError from './errors/missing-param-error'
 
 const makeSut = () => {
   const sut = new EmailValidator()
@@ -36,5 +37,12 @@ describe('EmailValidator', () => {
 
     expect(sut.email).toBe(validEmail)
     expect(validator.email).toBe(validEmail)
+  })
+
+  test('it should throw if no email is provided', () => {
+    const { sut } = makeSut()
+
+    // To test an exception from a non asynchronous method the expect should receive the pointer to the function
+    expect(sut.isValid).toThrow(new MissingParamError('email'))
   })
 })
