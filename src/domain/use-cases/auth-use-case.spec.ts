@@ -29,12 +29,12 @@ class EncrypterSpy implements IEncrypter {
 }
 
 class TokenGeneratorSpy implements ITokenGenerator {
-  userId: number
-  accessToken : string
+  id: number
+  token : string
   async generate (userId : number) : Promise<string> {
-    this.userId = userId
+    this.id = userId
 
-    return this.accessToken
+    return this.token
   }
 }
 
@@ -83,14 +83,14 @@ const makeEncrypterWithError = () => {
 
 const makeTokenGenerator = () => {
   const tokenGeneratorSpy = new TokenGeneratorSpy()
-  tokenGeneratorSpy.accessToken = 'access_token'
+  tokenGeneratorSpy.token = 'access_token'
   return tokenGeneratorSpy
 }
 
 const makeTokenGeneratorWithError = () => {
   const tokenGeneratorSpy = new TokenGeneratorSpy()
-  tokenGeneratorSpy.accessToken = 'access_token'
-  tokenGeneratorSpy.generate = (userId : number) => {
+  tokenGeneratorSpy.token = 'access_token'
+  tokenGeneratorSpy.generate = (id : number) => {
     throw new Error()
   }
   return tokenGeneratorSpy
@@ -290,7 +290,7 @@ describe('AuthUseCase', () => {
 
     await sut.auth(email, password)
     expect(updateAccessTokenRepositorySpy.userId).toBe(loadUserByEmailRepositorySpy.user.id)
-    expect(updateAccessTokenRepositorySpy.accessToken).toBe(tokenGeneratorSpy.accessToken)
+    expect(updateAccessTokenRepositorySpy.accessToken).toBe(tokenGeneratorSpy.token)
   })
 
   test('it should call TokenGenerator with correct userId', async () => {
@@ -300,7 +300,7 @@ describe('AuthUseCase', () => {
     const password = 'valid_password'
 
     await sut.auth(email, password)
-    expect(tokenGeneratorSpy.userId).toBe(loadUserByEmailRepositorySpy.user.id)
+    expect(tokenGeneratorSpy.id).toBe(loadUserByEmailRepositorySpy.user.id)
   })
 
   test('it should return an accessToken if correct credentials are provided', async () => {
@@ -310,7 +310,7 @@ describe('AuthUseCase', () => {
     const password = 'valid_password'
 
     const accessToken = await sut.auth(email, password)
-    expect(accessToken).toBe(tokenGeneratorSpy.accessToken)
+    expect(accessToken).toBe(tokenGeneratorSpy.token)
     expect(accessToken).toBeTruthy()
   })
 })

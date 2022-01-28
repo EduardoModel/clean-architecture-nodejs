@@ -1,5 +1,5 @@
 export default interface ITokenGenerator {
-  userId : number
-  accessToken : string
-  generate(userId : number) : Promise<string>
+  id : number
+  token : string
+  generate(id : number) : Promise<string>
 }
