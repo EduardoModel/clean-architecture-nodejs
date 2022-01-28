@@ -44,5 +44,7 @@ describe('EmailValidator', () => {
 
     // To test an exception from a non asynchronous method the expect should receive the pointer to the function
     expect(sut.isValid).toThrow(new MissingParamError('email'))
+    // This form is also valid, when its needed to test with more params
+    expect(() => { sut.isValid() }).toThrow(new MissingParamError('email'))
   })
 })
