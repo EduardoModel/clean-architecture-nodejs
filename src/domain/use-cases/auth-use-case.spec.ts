@@ -1,12 +1,12 @@
 import {
   MissingParamError
 } from '../../utils/errors'
-import ILoadUserByEmailRepository from '../../infastructure/interfaces/ILoadUserByEmailRepository'
+import ILoadUserByEmailRepository from '../../infastructure/repositories/interfaces/ILoadUserByEmailRepository'
 import AuthUseCase from './auth-use-case'
 import IEncrypter from '../../utils/interfaces/IEncrypter'
 import IUser from '../entities/interfaces/IUser'
 import ITokenGenerator from '../../utils/interfaces/ITokenGenerator'
-import IUpdateAccessTokenRepository from '../../infastructure/interfaces/IUpdateAccessTokenRepository'
+import IUpdateAccessTokenRepository from '../../infastructure/repositories/interfaces/IUpdateAccessTokenRepository'
 
 class LoadUserByEmailRepositorySpy implements ILoadUserByEmailRepository {
   email : string
@@ -31,6 +31,11 @@ class EncrypterSpy implements IEncrypter {
 class TokenGeneratorSpy implements ITokenGenerator {
   id: number
   token : string
+  secret: string
+  constructor (secret: string) {
+    this.secret = secret
+  }
+
   async generate (userId : number) : Promise<string> {
     this.id = userId
 
@@ -82,13 +87,13 @@ const makeEncrypterWithError = () => {
 }
 
 const makeTokenGenerator = () => {
-  const tokenGeneratorSpy = new TokenGeneratorSpy()
+  const tokenGeneratorSpy = new TokenGeneratorSpy('any_secret')
   tokenGeneratorSpy.token = 'access_token'
   return tokenGeneratorSpy
 }
 
 const makeTokenGeneratorWithError = () => {
-  const tokenGeneratorSpy = new TokenGeneratorSpy()
+  const tokenGeneratorSpy = new TokenGeneratorSpy('any_secret')
   tokenGeneratorSpy.token = 'access_token'
   tokenGeneratorSpy.generate = (id : number) => {
     throw new Error()
