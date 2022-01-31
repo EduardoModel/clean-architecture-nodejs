@@ -1,5 +1,6 @@
 import ITokenGenerator from './interfaces/ITokenGenerator'
 import jwt from 'jsonwebtoken'
+import MissingParamError from './errors/missing-param-error'
 
 class TokenGenerator implements ITokenGenerator {
   id: number
@@ -10,6 +11,10 @@ class TokenGenerator implements ITokenGenerator {
   }
 
   async generate (id: number) : Promise<string> {
+    if (!this.secret) {
+      throw new MissingParamError('secret')
+    }
+    this.id = id
     this.token = await jwt.sign({ id }, this.secret)
     return this.token
   }
@@ -40,11 +45,19 @@ describe('TokenGenerator', () => {
   })
 
   test('it should call jwt with correct params', async () => {
-    const { sut, secret } = makeSut()
+    const { sut } = makeSut()
 
     await sut.generate(1)
 
     expect(jwt.value).toStrictEqual({ id: 1 })
-    expect(jwt.secret).toBe(secret)
+    expect(jwt.secret).toBe(sut.secret)
+  })
+
+  test('it should throw if a secret is not provided', async () => {
+    const sut = new TokenGenerator()
+
+    const promise = sut.generate(1)
+
+    expect(promise).rejects.toThrow()
   })
 })
