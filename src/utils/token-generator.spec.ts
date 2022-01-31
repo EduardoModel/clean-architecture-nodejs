@@ -4,15 +4,21 @@ import jwt from 'jsonwebtoken'
 class TokenGenerator implements ITokenGenerator {
   id: number
   token: string
+  secret: string
+  constructor (secret : string) {
+    this.secret = secret
+  }
+
   async generate (id: number) : Promise<string> {
-    this.token = await jwt.sign({ id }, 'secret')
+    this.token = await jwt.sign({ id }, this.secret)
     return this.token
   }
 }
 
 const makeSut = () => {
-  const sut = new TokenGenerator()
-  return { sut }
+  const secret = 'any_secret'
+  const sut = new TokenGenerator(secret)
+  return { sut, secret }
 }
 
 describe('TokenGenerator', () => {
@@ -34,11 +40,11 @@ describe('TokenGenerator', () => {
   })
 
   test('it should call jwt with correct params', async () => {
-    const { sut } = makeSut()
+    const { sut, secret } = makeSut()
 
     await sut.generate(1)
 
     expect(jwt.value).toStrictEqual({ id: 1 })
-    expect(jwt.secret).toBe('secret')
+    expect(jwt.secret).toBe(secret)
   })
 })
