@@ -32,4 +32,13 @@ describe('TokenGenerator', () => {
 
     expect(accessToken).toBe(jwt.token)
   })
+
+  test('it should call jwt with correct params', async () => {
+    const { sut } = makeSut()
+
+    await sut.generate(1)
+
+    expect(jwt.value).toStrictEqual({ id: 1 })
+    expect(jwt.secret).toBe('secret')
+  })
 })

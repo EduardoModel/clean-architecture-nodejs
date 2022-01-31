@@ -1,6 +1,6 @@
 export default {
   token: 'any_token',
-  value: '',
+  value: {},
   secret: '',
   async sign (value, secret) : Promise<string> {
     this.value = value
