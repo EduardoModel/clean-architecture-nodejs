@@ -15,6 +15,9 @@ export default class LoadUserByEmailRepository implements ILoadUserByEmailReposi
     if (!this.userModel) {
       throw new MissingParamError('userModel')
     }
+    if (!email) {
+      throw new MissingParamError('email')
+    }
     this.email = email
     this.user = await this.userModel.findOne({
       where: {
