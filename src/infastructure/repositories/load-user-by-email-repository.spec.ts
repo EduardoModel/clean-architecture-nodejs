@@ -1,3 +1,4 @@
+import MissingParamError from '../../utils/errors/missing-param-error'
 import db from './../../database/models'
 import LoadUserByEmailRepository from './load-user-by-email-repository'
 
@@ -36,5 +37,12 @@ describe('LoadUserByEmailRepository', () => {
     expect(user.email).toBe(email)
     expect(user.password).toBe(password)
     expect(user.id).toBeTruthy()
+  })
+
+  test('it should throw an exception if no model is provided', async () => {
+    const sut = new LoadUserByEmailRepository()
+
+    const promise = sut.load('invalid_email@test.com')
+    expect(promise).rejects.toThrow(new MissingParamError('userModel'))
   })
 })

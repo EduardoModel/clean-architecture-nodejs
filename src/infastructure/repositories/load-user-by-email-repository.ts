@@ -1,5 +1,6 @@
 import { Model } from 'sequelize'
 import IUser from '../../domain/entities/interfaces/IUser'
+import MissingParamError from '../../utils/errors/missing-param-error'
 import ILoadUserByEmailRepository from './interfaces/ILoadUserByEmailRepository'
 
 export default class LoadUserByEmailRepository implements ILoadUserByEmailRepository {
@@ -11,6 +12,9 @@ export default class LoadUserByEmailRepository implements ILoadUserByEmailReposi
   }
 
   async load (email: string): Promise<IUser> {
+    if (!this.userModel) {
+      throw new MissingParamError('userModel')
+    }
     this.email = email
     this.user = await this.userModel.findOne({
       where: {
