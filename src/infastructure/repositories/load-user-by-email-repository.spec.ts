@@ -1,27 +1,7 @@
-import IUser from '../../domain/entities/interfaces/IUser'
-import ILoadUserByEmailRepository from './interfaces/ILoadUserByEmailRepository'
 import db from './../../database/models'
-import { Model } from 'sequelize'
+import LoadUserByEmailRepository from './load-user-by-email-repository'
 
 const { User } = db
-class LoadUserByEmailRepository implements ILoadUserByEmailRepository {
-  email: string
-  user: IUser
-  userModel: Model
-  constructor (userModel : Model) {
-    this.userModel = userModel
-  }
-
-  async load (email: string): Promise<IUser> {
-    this.email = email
-    this.user = await this.userModel.findOne({
-      where: {
-        email: this.email
-      }
-    })
-    return this.user
-  }
-}
 
 const makeSut = () => {
   const sut = new LoadUserByEmailRepository(User)
@@ -29,6 +9,7 @@ const makeSut = () => {
 }
 
 describe('LoadUserByEmailRepository', () => {
+  // Clean the database after each test
   beforeAll(() => {
     User.destroy({
       where: {},
@@ -45,13 +26,15 @@ describe('LoadUserByEmailRepository', () => {
 
   test('it should return an user if user was found', async () => {
     const email = 'valid_email@test.com'
-    await User.create({ email, password: 'any_password' })
+    const password = 'any_password'
+    await User.create({ email, password })
 
     const { sut } = makeSut()
 
     const user = await sut.load(email)
 
     expect(user.email).toBe(email)
+    expect(user.password).toBe(password)
     expect(user.id).toBeTruthy()
   })
 })
