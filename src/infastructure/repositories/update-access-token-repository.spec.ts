@@ -38,6 +38,13 @@ class UpdateAccessTokenRepository implements IUpdateAccessTokenRepository {
   }
 }
 
+const createFakeUser = async () : Promise<IUser> => {
+  return await User.create({
+    email: 'any_email@test.com',
+    password: 'any_password'
+  })
+}
+
 const makeSut = () => {
   const sut = new UpdateAccessTokenRepository(User)
   return { sut }
@@ -53,10 +60,7 @@ describe('UpdateAccessTokenRepository', () => {
   })
 
   test('it should update the user with the given accessToken', async () => {
-    let fakeUser : IUser = await User.create({
-      email: 'any_email@test.com',
-      password: 'any_password'
-    })
+    let fakeUser = await createFakeUser()
 
     const { sut } = makeSut()
 
@@ -70,10 +74,7 @@ describe('UpdateAccessTokenRepository', () => {
   })
 
   test('it should throw an error if no user model is provided', async () => {
-    const fakeUser : IUser = await User.create({
-      email: 'any_email@test.com',
-      password: 'any_password'
-    })
+    const fakeUser = await createFakeUser()
 
     const sut = new UpdateAccessTokenRepository()
 
@@ -93,10 +94,7 @@ describe('UpdateAccessTokenRepository', () => {
   })
 
   test('it should throw an error if no access token is provided', async () => {
-    const fakeUser : IUser = await User.create({
-      email: 'any_email@test.com',
-      password: 'any_password'
-    })
+    const fakeUser = await createFakeUser()
 
     const { sut } = makeSut()
 
