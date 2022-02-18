@@ -23,6 +23,9 @@ class UpdateAccessTokenRepository implements IUpdateAccessTokenRepository {
     if (!userId) {
       throw new MissingParamError('userId')
     }
+    if (!accessToken) {
+      throw new MissingParamError('accessToken')
+    }
 
     await this.userModel.update({
       accessToken
@@ -87,5 +90,18 @@ describe('UpdateAccessTokenRepository', () => {
     const promise = sut.update()
 
     expect(promise).rejects.toThrow(new MissingParamError('userId'))
+  })
+
+  test('it should throw an error if no access token is provided', async () => {
+    const fakeUser : IUser = await User.create({
+      email: 'any_email@test.com',
+      password: 'any_password'
+    })
+
+    const { sut } = makeSut()
+
+    const promise = sut.update(fakeUser.id)
+
+    expect(promise).rejects.toThrow(new MissingParamError('accessToken'))
   })
 })
