@@ -20,6 +20,10 @@ class UpdateAccessTokenRepository implements IUpdateAccessTokenRepository {
     if (!this.userModel) {
       throw new MissingParamError('userModel')
     }
+    if (!userId) {
+      throw new MissingParamError('userId')
+    }
+
     await this.userModel.update({
       accessToken
     },
@@ -75,5 +79,13 @@ describe('UpdateAccessTokenRepository', () => {
     const promise = sut.update(fakeUser.id, accessToken)
 
     expect(promise).rejects.toThrow(new MissingParamError('userModel'))
+  })
+
+  test('it should throw an error if no user id is provided', async () => {
+    const { sut } = makeSut()
+
+    const promise = sut.update()
+
+    expect(promise).rejects.toThrow(new MissingParamError('userId'))
   })
 })
