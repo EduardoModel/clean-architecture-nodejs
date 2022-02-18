@@ -43,6 +43,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
     password: {
       type: DataTypes.STRING(256),
       allowNull: true
+    },
+    accessToken: {
+      type: DataTypes.STRING(1024),
+      allowNull: true
     }
   }, {
     sequelize,
