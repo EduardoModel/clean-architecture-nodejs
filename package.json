@@ -7,7 +7,7 @@
     "dev": "nodemon src/server.ts",
     "build": "sucrase ./src -d ./dist --transforms typescript,imports",
     "prepare": "husky install",
-    "test": "jest --colors --noStackTrace --passWithNoTests",
+    "test": "jest --colors --passWithNoTests",
     "pretest:unit": "NODE_ENV=test sequelize db:migrate",
     "test:unit": "NODE_ENV=test yarn test --watch --runInBand --detectOpenHandles -c jest-unit-config.ts",
     "posttest:unit": "NODE_ENV=test sequelize db:migrate:undo:all",

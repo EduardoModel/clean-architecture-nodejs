@@ -5,5 +5,5 @@ export default interface IUpdateAccessTokenRepository {
   accessToken: string
   wasSuccessful: boolean
   userModel: Model
-  update(userId : number, accessToken : string) : Promise<boolean>
+  update(userId : number, accessToken : string) : Promise<void>
 }
