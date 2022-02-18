@@ -1,9 +1,10 @@
 {
   "name": "clean-architecture-nodejs",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/main/index.ts",
   "license": "MIT",
   "scripts": {
+    "start": "ts-node src/main",
     "dev": "nodemon src/server.ts",
     "build": "sucrase ./src -d ./dist --transforms typescript,imports",
     "prepare": "husky install",
@@ -11,13 +12,10 @@
     "pretest:unit": "NODE_ENV=test sequelize db:migrate",
     "test:unit": "NODE_ENV=test yarn test --watch --runInBand --detectOpenHandles -c jest-unit-config.ts",
     "posttest:unit": "NODE_ENV=test sequelize db:migrate:undo:all",
-
     "test:integration": "yarn test --watch -c jest-integration-config.ts",
-    
     "pretest:staged": "NODE_ENV=test sequelize db:migrate",
     "test:staged": "NODE_ENV=test yarn test --findRelatedTests",
     "posttest:staged": "NODE_ENV=test sequelize db:migrate:undo:all",
-
     "pretest:ci": "NODE_ENV=test sequelize db:migrate",
     "test:ci": "NODE_ENV=test yarn test --coverage",
     "posttest:ci": "NODE_ENV=test sequelize db:migrate:undo:all"
@@ -56,7 +54,7 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^15.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.13",
     "pg": "^8.7.1",
