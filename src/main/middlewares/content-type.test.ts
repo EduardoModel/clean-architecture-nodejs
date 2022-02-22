@@ -22,3 +22,10 @@ describe('Content-Type Middleware', () => {
       .expect('content-type', /xml/)
   })
 })
+
+/*
+  For the main module is more difficult to create unit tests
+  because this is the main entry point for the application and all the
+  elements will be instantiated within this file.
+  It is very difficult to test a module that isn't decoupled from others!
+*/
