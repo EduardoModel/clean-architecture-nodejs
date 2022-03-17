@@ -28,6 +28,33 @@ const makeAuthUseCaseSpy = () => {
   return new AuthUseCaseSpy()
 }
 
+const makeAuthUseCaseWithError = () => {
+  class AuthUseCaseWithError implements IAuthUseCase {
+    email: string
+    password: string
+    accessToken = 'valid_token'
+
+    auth (email, password) {
+      throw new Error()
+    }
+  }
+
+  return new AuthUseCaseWithError()
+}
+
+const makeEmailValidatorWithError = () => {
+  class EmailValidatorSpyWithError implements IEmailValidator {
+    email: string
+    isEmailValid = true
+
+    isValid (email) {
+      throw new Error()
+    }
+  }
+
+  return new EmailValidatorSpyWithError()
+}
+
 // Factory to create the system under test and the necessary libraries
 const makeSut = () => {
   // Test double (more about the topic)
@@ -205,6 +232,35 @@ describe('Login Router', () => {
       new LoginRouter({
         authUseCase,
         emailValidator: invalidDependency
+      })
+    )
+
+    for (const sut of suts) {
+      const httpResponse = await sut.route(httpRequest)
+
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body.error).toEqual(new ServerError())
+    }
+  })
+
+  test('it should should return 500 if any of the dependencies throws', async () => {
+    const authUseCase = makeAuthUseCaseSpy()
+
+    const httpRequest = {
+      body: {
+        // This values is to give more semantic for the tests
+        email: 'any_email@test.com',
+        password: 'any_password'
+      }
+    }
+
+    const suts = [].concat(
+      new LoginRouter({
+        authUseCase: makeAuthUseCaseWithError()
+      }),
+      new LoginRouter({
+        authUseCase,
+        emailValidator: makeEmailValidatorWithError()
       })
     )
 
