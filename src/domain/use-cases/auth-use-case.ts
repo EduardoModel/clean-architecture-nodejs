@@ -14,7 +14,7 @@ export default class AuthUseCase implements IAuthUseCase {
   loadUserByEmailRepository: ILoadUserByEmailRepository
   encrypter: IEncrypter
   tokenGenerator: ITokenGenerator
-  updateAccessTokenRepository: IUpdateAccessTokenRepository;
+  updateAccessTokenRepository: IUpdateAccessTokenRepository
 
   constructor (dependencies) {
     if (dependencies) {
