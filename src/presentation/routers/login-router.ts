@@ -12,9 +12,12 @@ export default class LoginRouter {
   authUseCase : IAuthUseCase
   emailValidator : IEmailValidator
 
-  constructor (authUseCase : IAuthUseCase, emailValidator : IEmailValidator) {
-    this.authUseCase = authUseCase
-    this.emailValidator = emailValidator
+  constructor (dependencies) {
+    if (dependencies) {
+      const { authUseCase, emailValidator } = dependencies
+      this.authUseCase = authUseCase
+      this.emailValidator = emailValidator
+    }
   }
 
   async route (httpRequest: IHttpRequest) : Promise<IHttpResponse> {

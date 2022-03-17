@@ -40,7 +40,7 @@ const makeSut = () => {
 
   const authUseCaseSpy = new AuthUseCaseSpy()
   const emailValidatorSpy = new EmailValidatorSpy()
-  const sut = new LoginRouter(authUseCaseSpy, emailValidatorSpy)
+  const sut = new LoginRouter({ authUseCase: authUseCaseSpy, emailValidator: emailValidatorSpy })
   return {
     sut,
     authUseCaseSpy,
