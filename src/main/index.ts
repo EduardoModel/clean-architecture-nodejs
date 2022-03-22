@@ -1,3 +1,4 @@
+import env from './config/env'
 import app from './config/app'
 
-app.listen(8000, () => console.log('Server is running on port 8000'))
+app.listen(env.port, () => console.log(`Server is running on port ${env.port}`))
