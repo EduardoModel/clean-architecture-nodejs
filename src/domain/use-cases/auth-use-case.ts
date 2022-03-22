@@ -2,10 +2,10 @@ import IAuthUseCase from './interfaces/IAuthUseCase'
 import {
   MissingParamError
 } from '../../utils/errors'
-import ILoadUserByEmailRepository from '../../infastructure/interfaces/ILoadUserByEmailRepository'
+import ILoadUserByEmailRepository from '../../infastructure/repositories/interfaces/ILoadUserByEmailRepository'
 import IEncrypter from '../../utils/interfaces/IEncrypter'
 import ITokenGenerator from '../../utils/interfaces/ITokenGenerator'
-import IUpdateAccessTokenRepository from '../../infastructure/interfaces/IUpdateAccessTokenRepository'
+import IUpdateAccessTokenRepository from '../../infastructure/repositories/interfaces/IUpdateAccessTokenRepository'
 
 export default class AuthUseCase implements IAuthUseCase {
   email: string
