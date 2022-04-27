@@ -2,7 +2,7 @@
 
 import fs from 'fs'
 import path from 'path'
-import { Sequelize } from 'sequelize'
+import { Sequelize, DataTypes } from 'sequelize'
 const basename = path.basename(__filename)
 const env = process.env.NODE_ENV || 'development'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -24,7 +24,7 @@ fs
   })
   .forEach((file: any) => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes)
+    const model = require(path.join(__dirname, file))(sequelize, DataTypes)
     db[model.name] = model
   })
 
