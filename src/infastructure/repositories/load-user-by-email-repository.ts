@@ -1,4 +1,3 @@
-import { Model } from 'sequelize'
 import IUser from '../../domain/entities/interfaces/IUser'
 import MissingParamError from '../../utils/errors/missing-param-error'
 import ILoadUserByEmailRepository from './interfaces/ILoadUserByEmailRepository'
@@ -6,8 +5,8 @@ import ILoadUserByEmailRepository from './interfaces/ILoadUserByEmailRepository'
 export default class LoadUserByEmailRepository implements ILoadUserByEmailRepository {
   email: string
   user: IUser
-  userModel: Model
-  constructor (userModel : Model) {
+  userModel: any
+  constructor (userModel: any) {
     this.userModel = userModel
   }
 
